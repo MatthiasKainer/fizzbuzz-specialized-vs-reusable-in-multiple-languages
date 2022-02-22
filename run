@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+##DOC python: Runs the python example. Requires pipenv and pyenv or python 3.8 on your path for python
+example_python() {
+    echo
+    echo "###########################"
+    echo "#         PYTHON          #"
+    echo "###########################"
+    echo "[requires pipenv/pyenv or python 3.8 on your path for python to work]"
+    echo
+    cd python
+    pipenv shell
+    python main.py
+    cd - > /dev/null
+}
+
+##DOC rust: Runs the rust example. Requires rustc & cargo
+example_rust() {
+    echo
+    echo "###########################"
+    echo "#         RUST            #"
+    echo "###########################"
+    echo "[requires rustc/cargo to work]"
+    echo
+    cd rust
+    cargo build --release
+    ./target/release/fizzbuzz
+    cd - > /dev/null
+}
+
+##DOC js: Runs the javascript example. Requires nvm or node >= 16
+example_js() {
+    echo
+    echo "###########################"
+    echo "#          JS             #"
+    echo "###########################"
+    echo "[requires nvm or node >= 16 to work]"
+    echo
+    cd js
+    nvm use
+    node index.js
+    cd - > /dev/null
+}
+
+##DOC kotlin: Runs the kotlin example. Requires kotlinc-jvm 1.6.10 (JRE 17.0.2+8)
+example_kotlin() {
+    echo
+    echo "###########################"
+    echo "#        KOTLIN           #"
+    echo "###########################"
+    echo "[requires kotlinc-jvm 1.6.10 to work]"
+    echo
+    cd kotlin
+    ./mk-kotlin
+    cd - > /dev/null
+}
+
+##DOC dotnet: Runs the dotnet example. Requires dotnet cli >=6.0.102
+example_dotnet() {
+    echo
+    echo "###########################"
+    echo "#        DOTNET           #"
+    echo "###########################"
+    echo "[requires dotnet cli >=6.0.102 to work]"
+    echo
+    cd dotnet
+    dotnet publish -c Release > /dev/null
+    ./bin/Release/net6.0/dotnet
+    cd - > /dev/null
+}
+
+##DOC all: Runs all examples
+example_all() {
+  example_python
+  example_kotlin
+  example_js
+  example_dotnet
+  example_rust
+}
+
+if type -t "example_$1" &>/dev/null; then
+  "example_$1" "${@:2}"
+else
+  echo "usage: $0 <example>"
+  echo
+  grep -e "^##DOC" <"$(basename "$0")" | sed "s/^##DOC \(.*\)/  \1/"
+  echo
+  exit 1
+fi

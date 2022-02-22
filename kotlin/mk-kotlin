@@ -1,0 +1,18 @@
+#!/bin/bash
+
+rm -rf target/ 
+mkdir target
+
+# get all kotlin files in the folder
+files="$(find . -name '*.kt' -print)"
+
+# compile to a jar
+kotlinc $files -include-runtime -d target/out.jar
+# run the jar, and pass the remaining arguments to it
+java -jar target/out.jar "$@"
+
+
+# compile to a native
+# kotlinc-native $files -o target/fizzbuzz
+# run the kexe
+# ./target/fizzbuzz.kexe
